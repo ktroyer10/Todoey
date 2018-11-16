@@ -95,6 +95,7 @@ class TodoListViewController: UITableViewController {
                 do {
                     try self.realm.write {
                         let newItem = Item()
+                        newItem.dateCreated = Date()
                         newItem.title = textField.text!
                         currentCategory.items.append(newItem)
                     }
@@ -127,20 +128,7 @@ class TodoListViewController: UITableViewController {
         
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
 
-//        let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-//
-//        if let additionalPredicate = predicate {
-//            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [additionalPredicate, categoryPredicate])
-//        } else {
-//            request.predicate = categoryPredicate
-//        }
-//
-//        do {
-//            itemArray = try context.fetch(request)
-//        } catch {
-//            print("Error fetching data from context \(error)")
-//        }
-//        tableView.reloadData()
+        tableView.reloadData()
     }
 
 }
@@ -151,6 +139,8 @@ extension TodoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 
         todoItems = todoItems?.filter("title MATCHES %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
 
     }
 
